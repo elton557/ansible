@@ -1,0 +1,25 @@
+# {{ ansible_managed }}
+
+upstream {{ item.backend_name }} {
+    {% if item.balancer_config is defined %}
+  
+  {% for balancer in item.balancer_config %}
+    {{ balancer }};
+    {% endfor %}
+    {% endif %}
+
+    {% for backend in item.backends %}
+    server {{ backend }};
+    {% endfor %}
+}
+
+server {
+    listen 443;
+    server_name {{ item.domains|join(' ') }};
+    ssl_certificate {{ item.ssl_certificate}};
+    location / {
+        proxy_set_header   X-Real-IP $remote_addr;
+        proxy_set_header   Host      $http_host;
+        proxy_pass         http://{{ item.backend_name }};
+    }
+}

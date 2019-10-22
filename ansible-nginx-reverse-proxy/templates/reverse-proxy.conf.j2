@@ -1,0 +1,19 @@
+# {{ ansible_managed }}
+#jinja2: lstrip_blocks: "True"
+upstream {{ item.backend_name }} {
+    {%for balancer in item.balancer_config %}
+    {{ balancer }};
+    {% endfor %} 
+    {% for backend in item.backends %}
+    server {{ backend }};
+    {% endfor %}
+    
+}
+
+server {
+    listen 443;
+    server_name {{ item.domains|join(' ') }};
+        
+        
+    }
+
