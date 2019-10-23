@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: local
   remote_user: gandalf
   become: yes
   vars:
@@ -20,4 +20,5 @@
          
   roles:
     - ansible-nginx-reverse-proxy
-...
+
+# Jinja indent: https://jinja.palletsprojects.com/en/2.10.x/templates/#indent
